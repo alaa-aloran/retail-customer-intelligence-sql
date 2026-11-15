@@ -1,91 +1,66 @@
--- The Evidence, business interpretation, recommendations
-
 # Retail Customer Intelligence — Findings & Business Implications
 
-> **Project status:** Objective 1 completed. Objectives 2 and 3 will be added as the analysis progresses.
->
-> **Context:** This is a portfolio analysis of the dunnhumby _The Complete Journey_ dataset, using a hypothetical retail client scenario.
+**Dataset:** dunnhumby _The Complete Journey_ | **Coverage:** 2,500 purchasing households, 711 relative days  
+**Project context:** Portfolio analysis for a hypothetical retail client. Amounts are recorded sales in dataset units, not verified profit or net revenue.
 
-## Objective 1 — Understand Customer Purchasing Behavior
+## Executive Summary
 
-### Q1. How frequently do households shop, and how much time typically passes between shopping trips?
+- **Sales concentration:** The top 20% of households generated **53.05%** of recorded sales.
+- **Repeat purchasing matters:** Shopping frequency has a stronger linear association with spending (**0.703**) than average basket value (**0.390**).
+- **Retention priorities:** Champions generated **48.05%** of sales, while the At-Risk segment contributed another **16.26%**; these are historical contributions, not forecasts.
+- **Growth candidates:** **328 households** met screening criteria for possible repeat-purchase initiatives.
+- **Promotions:** Coupon redemption varied by segment, but purchasing changed only modestly around first redemption. **Engagement does not automatically mean increased purchasing.**
 
-Across **2,500 purchasing households**, the dataset contains **275,539 qualifying baskets** over **711 days**. The median household recorded **78 baskets**, while the median gap between consecutive purchasing days was **3 days**.
+## Objective 1 — Understand Purchasing Behavior
 
-**Business insight:** Customers have different shopping habits. The retailer should consider both how often households purchase and how regularly they return when assessing engagement.
+### Q1. How often do households purchase?
 
-### Q2. How do purchasing frequency and spending patterns change over the observation period?
+### Q1. How often do households purchase?
 
-Purchasing activity increased rapidly during approximately the first **17 weeks** before becoming relatively stable. In later weeks, recorded sales were generally higher, and customers spent slightly more per basket.
+### Q1. How often do households purchase?
 
-**Business insight:** Sales performance is influenced by both the number of purchases and the amount spent per basket. A retailer can benefit from understanding both patterns rather than focusing on purchase counts alone.
+Across **2,500 households**, the analysis identified **275,539 qualifying baskets** over 711 days. The median household made **78 purchases**, while the median time between consecutive _purchasing days_ was **3 days**.
 
-### Q3. Which households show signs of declining purchase frequency or prolonged inactivity?
+**Business implication:** Understanding how frequently households purchase and how regularly they return can help retailers identify changes in customer engagement and detect early signs of declining activity.
 
-| Customer activity status | Households |  Share |
-| ------------------------ | ---------: | -----: |
-| Active — Increasing      |      1,075 | 43.00% |
-| Active — Declining       |      1,065 | 42.60% |
-| Active — Stable          |        186 |  7.44% |
-| Inactive — 90+ Days      |        174 |  6.96% |
+### Q2. How did purchasing and spending change over time?
 
-**Business insight:** **49.56% of households** either purchased less frequently or had not purchased in the latest 90 days. These households warrant further investigation, but a decline in purchasing does not necessarily mean a customer is leaving.
+Weekly purchasing activity grew during roughly the first **17 weeks**, then broadly stabilized. Recorded weekly sales and average basket values were generally somewhat higher later in the observation period.
 
-### Overall takeaway
+**Business implication:** Monitor purchase volume alongside basket value rather than relying on sales totals alone.
 
-Customer purchasing patterns vary substantially. While many households are increasing their activity, a similarly large group is purchasing less often, and some have stopped purchasing recently.
+### Q3. Which households show declining activity or inactivity?
 
-**What comes next:** Objective 2 will examine customer spending and value to help the retailer determine which households represent the most important retention and growth opportunities.
+| Activity status     | Households |  Share |
+| ------------------- | ---------: | -----: |
+| Active — Increasing |      1,075 | 43.00% |
+| Active — Declining  |      1,065 | 42.60% |
+| Active — Stable     |        186 |  7.44% |
+| Inactive — 90+ Days |        174 |  6.96% |
 
-### Important interpretation notes
+**Business implication:** **49.56%** were either purchasing less often across the two latest 90-day periods or had been inactive for at least 90 days. These are investigation signals, **not confirmed churn**.
 
-- A **qualifying basket** has at least one transaction line with `quantity > 0` and `sales_value > 0`.
-- Purchase counts refer to **distinct baskets**, not confirmed physical store visits.
-- The **3-day median** reflects all observed gaps between distinct purchasing days, not the median of each household's own gaps.
-- Weekly trend comparisons exclude the partial **Weeks 1 and 102**.
-- Activity status compares the two latest **90-day periods**; the inactivity threshold is an analytical assumption, not confirmed customer churn.
-- These historical patterns do not establish what caused changes in purchasing or spending.
-
-### Objective 1 visualizations
-
-- [Weekly Purchasing Activity](../outputs/charts/01_obj1_weekly_purchasing_activity.png)
-- [Weekly Customer Spending](../outputs/charts/01_obj2_weekly_customer_spending.png)
-- [Customer Activity Status](../outputs/charts/01_obj3_customer_activity_status.png)
+**Objective 1 charts:** [Weekly purchasing](../outputs/charts/01_obj1_weekly_purchasing_activity.png) · [Weekly spending](../outputs/charts/02_obj1_weekly_customer_spending.png) · [Activity status](../outputs/charts/03_obj1_customer_activity_status.png)
 
 ## Objective 2 — Identify Customer Value Drivers
 
-### Q4. Customer Revenue Distribution
+### Q4. How is recorded sales value distributed?
 
-Total recorded sales across 2,500 households reached
-8,057,462.65.
+Recorded sales totaled **8,057,462.65**. The top **10%** of households contributed **34.29%**, and the top **20%** contributed **53.05%**. The bottom half contributed **15.66%**. Average household spending (**3,222.99**) exceeded the median (**2,157.75**).
 
-- Top 10% of households: 34.29% of sales.
-- Top 20% of households: 53.05% of sales.
-- Bottom 50% of households: approximately 15.66% of sales.
-- Average household spending: 3,222.99.
-- Median household spending: 2,157.75.
+**Business implication:** Revenue concentration makes engagement among high-spending households particularly important.
 
-**Business Insight:** Sales are concentrated among
-higher-spending households. Retaining their engagement
-may be important for protecting future sales.
+[Revenue distribution by spending decile](../outputs/charts/04_obj2_customer_revenue_by_decile.png)
 
-### Q5. Household Spending Drivers
+### Q5. Which purchasing measure is more closely associated with spending?
 
-Pearson correlations with total household spending:
+Household spending correlated more strongly with **purchase frequency (0.703)** than with **average basket value (0.390)**.
 
-- Shopping frequency: 0.703.
-- Average basket value: 0.390.
+**Business implication:** Repeat-purchase initiatives warrant investigation, but these correlations do **not** demonstrate causation. Spending is mathematically related to both measures.
 
-**Business Insight:** Shopping frequency has a stronger
-positive linear association with total spending than
-average basket value. Encouraging repeat purchasing
-could be explored as a growth opportunity.
+### Q6. How do department spending and variety differ?
 
-These relationships do not demonstrate causation.
-
-### Q6. Product Preferences and Diversity
-
-Department share of each group's recorded sales:
+**High-Value** refers to the top 20% of households by spending (500); **Lower-Value** refers to the remaining 80% (2,000). Department shares are calculated _within each group_.
 
 | Department | High-Value | Lower-Value |
 | ---------- | ---------: | ----------: |
@@ -95,111 +70,72 @@ Department share of each group's recorded sales:
 | Produce    |      6.99% |       6.84% |
 | Meat       |      6.48% |       7.19% |
 
-Both groups concentrate spending in broadly similar
-departments. Grocery is the largest department for each
-group, while Kiosk-Gas represents a greater share of
-High-Value household spending.
+Both groups spend heavily in Grocery, but Kiosk-Gas accounts for a larger share among High-Value households. High-Value households purchased from **16.14 departments on average**, compared with **11.31** for Lower-Value households.
 
-High-Value households purchased from an average of
-16.14 departments (median 16), compared with 11.31
-departments (median 11) for Lower-Value households.
+**Business implication:** Exploring broader department engagement may be useful, though frequent shoppers naturally have more opportunities to buy across departments. Kiosk-Gas should not be interpreted as ordinary grocery merchandise.
 
-**Business Insight:** Higher-spending households
-purchase across a wider range of departments.
-Broader category engagement among Lower-Value households
-may offer opportunities for further investigation.
-
-### Overall Objective 2 Conclusion
-
-Revenue is concentrated among higher-spending households,
-whose spending is more strongly associated with shopping
-frequency and who purchase across more departments.
-
-Potential opportunities include protecting engagement
-among high-spending households, encouraging repeat
-purchases, and exploring cross-category purchasing.
-
-These are analytical opportunities, not demonstrated
-effects of specific marketing interventions.
-
-### Objective 2 visualizations
-
-- ![Customer Revenue Distribution](outputs/charts/customer_revenue_by_decile.png)
-- ![Department Spending Mix](outputs/charts/department_spending_mix.png)
-- ![Category Diversity](outputs/charts/category_diversity_by_customer_group.png)
+**Objective 2 charts:** [Department spending mix](../outputs/charts/05_obj2_department_spending_mix.png) · [Department diversity](../outputs/charts/06_obj2_category_diversity_by_customer_group.png)
 
 ## Objective 3 — Identify Retention and Growth Opportunities
 
-### Q7. How can households be segmented using RFM?
+### Q7. How were households segmented?
 
-All **2,500 households** were classified into six score-based segments:
+RFM (Recency, Frequency, Monetary) scores classified all **2,500 households** into six groups:
 
-| RFM segment                   | Households | Share of households |
-| ----------------------------- | ---------: | ------------------: |
-| Hibernating Households        |        549 |              21.96% |
-| Champions                     |        539 |              21.56% |
-| At-Risk Households            |        426 |              17.04% |
-| Potential Loyalists           |        414 |              16.56% |
-| Loyal Households              |        306 |              12.24% |
-| Regular / Moderate Engagement |        266 |              10.64% |
+| Segment                       | Households |  Share |
+| ----------------------------- | ---------: | -----: |
+| Champions                     |        539 | 21.56% |
+| Loyal Households              |        306 | 12.24% |
+| Potential Loyalists           |        414 | 16.56% |
+| Regular / Moderate Engagement |        266 | 10.64% |
+| At-Risk Households            |        426 | 17.04% |
+| Hibernating Households        |        549 | 21.96% |
 
-**Business insight:** The segmentation distinguishes currently strong purchasing, lower-frequency growth candidates and comparatively less-recent activity. All labels are **relative**, not confirmed churn or loyalty. Segment meanings, complete RFM rules and recommended actions are documented in [methodology.md](methodology.md).
+**Business implication:** Different purchasing profiles call for different engagement strategies. Segment rules and suggested actions are in [Analytical Methodology](methodology.md). Labels indicate **relative behavior**, not verified loyalty or churn.
 
-### Q8. Which segments contribute most sales and show disengagement signs?
+### Q8. Which segments contribute most sales, and which show inactivity?
 
-| Segment                       | Share of recorded sales | Median days since last purchase | Households inactive 90+ days |
-| ----------------------------- | ----------------------: | ------------------------------: | ---------------------------: |
-| Champions                     |                  48.05% |                               1 |                            0 |
-| At-Risk Households            |                  16.26% |                              20 |                           38 |
-| Loyal Households              |                  14.71% |                               5 |                            0 |
-| Potential Loyalists           |                  10.13% |                               2 |                            0 |
-| Regular / Moderate Engagement |                   6.55% |                               7 |                            0 |
-| Hibernating Households        |                   4.30% |                              41 |                          136 |
+- **Champions:** **48.05%** of recorded sales; with Loyal Households, **62.76%** combined.
+- **At-Risk:** **16.26%** of sales, but only **38 of 426 (8.92%)** were inactive for 90+ days; median inactivity was **20 days**.
+- **Hibernating:** **4.30%** of sales; **136 of 549 (24.77%)** were inactive for 90+ days; median inactivity was **41 days**.
 
-**Champions account for 21.56% of households but generate 48.05% of recorded sales.** Champions and Loyal Households together contribute **62.76%**. At-Risk households contribute **16.26%**, warranting investigation given their historical value. All **174** households with 90+ days of inactivity fall within the At-Risk (38) and Hibernating (136) groups, matching Objective 1.
+All **174 households** meeting the assumed 90-day inactivity threshold fall into the At-Risk or Hibernating groups, reconciling with Objective 1.
 
-**Business insight:** Maintaining engagement among Champions and Loyal Households protects an important source of historical sales. Hibernating households show stronger prolonged-inactivity signals than At-Risk households. Yet only **8.92% of At-Risk** and **24.77% of Hibernating** households meet the 90-day threshold; segment names are not verified churn diagnoses.
+**Business implication:** Protect high-contributing segments and investigate inactivity among previously engaged households. RFM labels alone should not be treated as confirmed customer loss.
 
-![Sales contribution versus household share](../outputs/charts/rfm_segment_revenue_vs_households.png)
+**Objective 3 charts:** [Sales versus household share](../outputs/charts/07_obj3_rfm_segment_revenue_vs_households.png) · [Inactivity by segment](../outputs/charts/08_obj3_rfm_segment_inactivity.png)
 
-![Inactivity by segment](../outputs/charts/rfm_segment_inactivity.png)
+### Q9. Which households are candidates for more engagement?
 
-### Q9. Which occasional or moderate-value households might increase engagement?
+Potential Loyalists (**414**) and Regular / Moderate Engagement (**266**) purchased less frequently than Loyal Households (about **56–58** versus **160** baskets per household on average), but had higher average basket values (**33.65** and **35.05** versus **25.30**).
 
-**Potential Loyalists (414)** and **Regular / Moderate Engagement (266)** total **680 households (27.20%)**. They average **57.88** and **55.90** qualifying baskets respectively, compared with **160.04** for Loyal Households. Yet their mean household-level average basket values (**33.65** and **35.05**) exceed the Loyal group (**25.30**). Potential Loyalists have particularly recent activity (mean recency **1.68 days**).
+An RFM screening rule (**R ≥ 3, F ≤ 3, M ≥ 3**) identified **328 households (13.12%)** for further investigation.
 
-An RFM-based screening rule (**R ≥ 3, F ≤ 3, M ≥ 3**) identifies **328 households (13.12% of all households)** to investigate for repeat-purchase opportunities.
+**Business implication:** Test approaches focused on return visits. These are **screened candidates, not predicted marketing responders**.
 
-**Business insight:** A frequency-focused engagement experiment may be worth testing for these groups. The analysis does not predict uplift or prove that additional marketing would change their purchasing.
+### Q10. How does promotional engagement vary by segment? _(Supporting)_
 
-### Q10. How do campaign assignment and coupon redemption differ by segment? (Supporting)
+Among campaign-assigned households, coupon redemption was highest for **Champions (43.56%)**, followed by **Loyal Households (28.13%)**, and lowest for **Hibernating Households (1.49%)**. At-Risk Households had **81.22% campaign assignment** but **18.79% redemption** among those assigned.
 
-| Segment                       | Campaign assignment rate | Redemption among assigned households |
-| ----------------------------- | -----------------------: | -----------------------------------: |
-| Champions                     |                   97.96% |                               43.56% |
-| Loyal Households              |                   94.12% |                               28.13% |
-| At-Risk Households            |                   81.22% |                               18.79% |
-| Potential Loyalists           |                   52.17% |                               17.59% |
-| Regular / Moderate Engagement |                   52.26% |                               13.67% |
-| Hibernating Households        |                   12.20% |                                1.49% |
+Across the dataset, **1,584 households** were associated with campaigns and **434** redeemed coupons.
 
-Across all segments, **1,584 households** were associated with campaigns and **434** redeemed coupons. Redemption was most common among campaign-assigned Champions and least common among campaign-assigned Hibernating households. **Campaign assignment does not prove exposure or active participation**; varying campaign targeting and customer behavior may explain differences.
+**Business implication:** Promotional usage differs by customer segment. Campaign assignment is **not proof of exposure or participation**, and redemption differences do not establish effectiveness.
 
-![Promotional engagement by RFM segment](../outputs/charts/rfm_promotional_engagement.png)
+[Promotional engagement by segment](../outputs/charts/09_obj3_rfm_promotional_engagement.png)
 
-### Q11. Are redemptions associated with later purchase changes? (Exploratory supporting)
+### Q11. Did purchasing change after coupon redemption? _(Exploratory supporting)_
 
-For **432** coupon-redeeming households with complete 30-day windows around first redemption (excluding redemption day):
+For **432 households** with complete 30-day windows around their first recorded coupon redemption (excluding redemption day):
 
-| Household-average measure   | 30 days before | 30 days after | Mean household change |
-| --------------------------- | -------------: | ------------: | --------------------: |
-| Qualifying purchase baskets |           9.04 |          8.90 |                 −0.15 |
-| Recorded spending           |         297.31 |        305.34 |                 +8.04 |
+| Household average  | 30 days before | 30 days after | Average change |
+| ------------------ | -------------: | ------------: | -------------: |
+| Qualifying baskets |           9.04 |          8.90 |          −0.15 |
+| Recorded spending  |         297.31 |        305.34 |          +8.04 |
 
-The small differences suggest approximately stable purchasing frequency and modestly higher recorded spending among these households. **Promotional engagement does not automatically correspond to a meaningful increase in purchasing.** This before/after comparison has no control group, cannot establish promotional impact and does not fully isolate differences between types of promotional engagement.
+**Business implication:** Frequency remained broadly stable and spending increased modestly. **Promotional engagement does not automatically correspond to a meaningful increase in purchasing.** Without a control group, these changes cannot be attributed to coupon redemption.
 
-### Overall Objective 3 conclusion
+## Overall Business Takeaway
 
-The retailer's historical sales depend heavily on recently active, high-spending households, while lower-frequency but meaningful spenders offer candidates for **testing** repeat-purchase initiatives. RFM segmentation is useful for prioritization, but actual inactivity shows why relative labels such as _At-Risk_ and _Hibernating_ must be interpreted cautiously. Coupon redemption differs markedly by segment, yet descriptive before/after results do **not** establish a meaningful or causal promotion-driven increase.
+The retailer should **protect strong existing relationships**, **investigate disengagement among historically valuable households**, and **test repeat-purchase strategies for selected lower-frequency customers**. Promotions are worth analyzing, but coupon use alone is not evidence of incremental sales.
 
-**Status:** Q7–Q9 complete. Q10 retained as descriptive supporting analysis; Q11 retained as exploratory supporting analysis, with explicit caveats. The agreed questions in `docs/business_case.md` remain unchanged.
+_Interpretation notes:_ A qualifying purchase basket contains at least one line with positive quantity and sales; all its recorded sales lines contribute to spending. The 90-day threshold is an analytical assumption. The data uses relative days, and findings are descriptive rather than causal. For full definitions, see [Analytical Methodology](methodology.md). The business-question scope remains documented in [Business Case](business_case.md).

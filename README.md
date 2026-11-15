@@ -1,100 +1,75 @@
 # Retail Customer Intelligence
 
-## Customer Behavior, Loyalty & Value Analysis Using PostgreSQL
+**A business-focused SQL analysis of purchasing behavior, customer value, and retention opportunities**
 
-A SQL portfolio project analyzing real retail transaction data from the dunnhumby Complete Journey dataset.
+## The business challenge
 
-### Tools
+How can a retailer use transaction data to understand shopping habits, identify valuable customers, and prioritize opportunities to improve engagement?
 
-- PostgreSQL
-- VS Code
-- SQLTools
-- Git & GitHub
+I explored this question using the **dunnhumby _The Complete Journey_** dataset, treating the retailer as a hypothetical client. The project moves from purchasing patterns to customer value and, finally, actionable retention and growth opportunities.
 
-### Project Status
+**At a glance:** 2,500 purchasing households · 275,539 qualifying purchase baskets · 711 days of transactions · 3 analytical objectives
 
-Phase 1 — Business Understanding & Database Setup
+## Key findings
 
-### Dataset
+### 1. Understand purchasing behavior
 
-dunnhumby — The Complete Journey
+**Question:** How often do customers purchase, and which households show signs of reduced activity?
 
-The original dataset files are excluded from this repository.
+- The median household made **78 purchases**; the median time between consecutive purchasing days was **3 days**.
+- **49.56% of households** showed declining purchase frequency or had no qualifying purchase in the latest 90 days. Of these, **174 households (6.96%)** met the 90-day inactivity threshold.
 
-## Customer Purchasing Behavior
+**Business implication:** Monitoring both purchase frequency and how regularly customers return can help identify changes in engagement before prolonged inactivity develops.
 
-### Weekly Purchasing Activity
+![Customer purchasing activity status](outputs/charts/03_obj1_customer_activity_status.png)
 
-![Weekly Purchasing Activity](outputs/charts/01_obj1_weekly_purchasing_activity.png)
+### 2. Identify customer value drivers
 
-### Weekly Customer Spending
+**Question:** Where is customer spending concentrated, and what distinguishes higher-spending households?
 
-![Weekly Customer Spending](outputs/charts/02_obj1_weekly_customer_spending.png)
+- The **top 20% of households contributed 53.05%** of recorded sales.
+- Purchase frequency had a stronger positive association with total spending (**0.703 correlation**) than average basket value (**0.390**).
+- Higher-spending households purchased from **16.14 departments on average**, compared with **11.31** for other households.
 
-### Customer Purchasing Activity Status
+**Business implication:** Retaining higher-spending households matters, while encouraging repeat purchases and broader department engagement offers opportunities worth testing.
 
-![Customer Activity Status](outputs/charts/03_obj1_customer_activity_status.png)
+![Customer spending distribution](outputs/charts/04_obj2_customer_revenue_by_decile.png)
 
-## Objective 2: Identify Customer Value Drivers
+### 3. Prioritize retention and growth opportunities
 
-This analysis examines how recorded sales are distributed
-across households, what distinguishes higher-spending
-customers, and how purchasing preferences differ.
+**Question:** Which customer groups deserve attention, and what can promotional behavior tell us?
 
-### Key Findings
+**RFM segmentation** groups customers based on how recently they purchased (Recency), how often they purchased (Frequency), and how much they spent (Monetary). See the [methodology](docs/methodology.md) for scoring and segment definitions.
 
-- **Revenue concentration:** The top 10% of households
-  generated 34.29% of total recorded sales, while the
-  top 20% contributed 53.05%.
-- **Spending drivers:** Shopping frequency showed a
-  stronger positive correlation with total spending
-  (0.703) than average basket value (0.390).
-- **Department preferences:** Grocery represented the
-  largest share of spending for both high-value and
-  lower-value households.
-- **Category diversity:** High-value households purchased
-  from an average of 16.14 departments, compared with
-  11.31 for lower-value households.
+- **Champions** represented **21.56% of households** but contributed **48.05% of recorded sales**.
+- RFM analysis identified **328 households** for further investigation as potential repeat-purchase growth candidates.
+- Coupon redemption varied across customer segments. However, a 30-day before/after comparison found **no clear increase in purchase frequency** after redemption; it cannot establish promotional impact.
 
-### Business Implications
+**Business implication:** Use segmentation to prioritize customer engagement tests, then evaluate whether those initiatives actually improve purchasing behavior.
 
-The retailer's sales are concentrated among a relatively
-small group of households. Maintaining their engagement
-may help protect sales, while encouraging repeat purchases
-and broader department exploration among lower-spending
-households may offer growth opportunities.
+![RFM segments: sales contribution versus household share](outputs/charts/07_obj3_rfm_segment_revenue_vs_households.png)
 
-These findings describe historical purchasing patterns;
-they do not establish causation or customer profitability.
+## Approach and skills demonstrated
 
-### Visualizations
+**Tools:** PostgreSQL · SQL · VS Code / SQLTools · Git & GitHub
 
-![Customer Revenue Distribution](outputs/charts/customer_revenue_by_decile.png)
+- **Data preparation and validation:** Imported related retail tables, checked data quality, and applied consistent rules for qualifying purchase baskets.
+- **Analytical SQL:** Used joins, common table expressions (CTEs), window functions, ranking, segmentation, and statistical aggregates to answer business questions.
+- **Business interpretation:** Translated transaction-level patterns into customer metrics, risk indicators, and testable recommendations, while documenting assumptions and limitations.
 
-![Department Spending Mix](outputs/charts/department_spending_mix.png)
+The SQL scripts are organized by objective and can be reviewed independently; detailed explanations live in the supporting documentation rather than in this README.
 
-![Category Diversity](outputs/charts/category_diversity_by_customer_group.png)
+## Explore the project
 
-## Objective 3 — Identify Retention and Growth Opportunities
+| Resource                                                   | What you'll find                                    |
+| ---------------------------------------------------------- | --------------------------------------------------- |
+| [Business case](docs/business_case.md)                     | Retail scenario, objectives, and business questions |
+| [Findings & business implications](docs/final_insights.md) | Results for all questions and links to the charts   |
+| [Analytical methodology](docs/methodology.md)              | Metrics, segmentation rules, and limitations        |
+| [SQL learning notes](docs/sql_learning_notes.md)           | SQL techniques applied and what they helped solve   |
+| [SQL scripts](sql/)                                        | Executable analysis organized by objective          |
+| [Database diagram](docs/database_erd.png)                  | Relationships among the project tables              |
 
-**Business decision:** Which households might benefit from differentiated engagement or retention initiatives?
+**Data note:** The original dataset files are not included in the repository. Sales figures represent recorded dataset values, not verified profit or net revenue. The 90-day inactivity cutoff and RFM labels are analytical indicators—not confirmed churn—and observational results do not establish causation.
 
-Using Recency, Frequency and Monetary (RFM) scores, **2,500 purchasing households** were classified into six behavioral segments. These are relative, analysis-defined groups—not confirmed loyalty or churn labels.
-
-### Key findings
-
-- **Revenue concentration (Q7–Q8):** Champions account for **21.56% of households** but **48.05% of recorded sales**. Champions and Loyal Households together generate **62.76%**.
-- **Inactivity warning signs (Q8):** **174 households** had no qualifying purchase for at least 90 days: **136 Hibernating** and **38 At-Risk**. The 90-day cutoff is an analytical assumption, not confirmed churn.
-- **Growth candidates (Q9):** **328 households** (13.12%) met a defined RFM screening rule for relatively recent activity, lower frequency and moderate-or-higher spending; this is not a response prediction.
-- **Promotional engagement (Q10, supporting):** Among campaign-assigned households, coupon redemption was highest for **Champions (43.56%)** and lowest for **Hibernating (1.49%)**. Assignment does not prove campaign exposure.
-- **Purchasing after redemption (Q11, exploratory supporting):** For **432 households** with complete 30-day windows, average qualifying baskets changed from **9.04 to 8.90**, while average recorded spending changed from **297.31 to 305.34**. **Promotional engagement does not automatically correspond to a meaningful increase in purchasing.** These before/after results do not establish promotional impact.
-
-### Visualizations
-
-![RFM segment sales vs household share](outputs/charts/rfm_segment_revenue_vs_households.png)
-
-![Prolonged inactivity by RFM segment](outputs/charts/rfm_segment_inactivity.png)
-
-![Campaign assignment and coupon redemption](outputs/charts/rfm_promotional_engagement.png)
-
-**Methodology and full findings:** [Methodology](docs/methodology.md) · [Business insights](docs/final_insights.md)
+**AI-assisted workflow:** AI tools supported SQL learning, query refinement, analytical checks, and documentation. Business framing, methodological choices, interpretation, and final review were developed through an iterative analytical process.

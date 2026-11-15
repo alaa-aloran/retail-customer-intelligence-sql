@@ -1,77 +1,39 @@
 # SQL Learning Notes
 
-Practical SQL techniques applied in the Retail Customer
-Intelligence project.
+A quick reference to the PostgreSQL techniques used in the **Retail Customer Intelligence** project, and the business questions they helped answer.
 
-| SQL technique        | Purpose                                                | Project application                       |
-| -------------------- | ------------------------------------------------------ | ----------------------------------------- |
-| `CTE (WITH)`         | Break complex queries into understandable steps        | Household and basket analysis             |
-| `LAG()`              | Compare a row with the previous row                    | Days between shopping trips               |
-| `FILTER (WHERE ...)` | Apply conditions to individual aggregate calculations  | Purchase counts and customer status       |
-| `PERCENTILE_CONT()`  | Calculate percentiles, including the median            | Shopping frequency and household spending |
-| `NTILE()`            | Divide ranked records into approximately equal groups  | Revenue deciles and customer value groups |
-| `ROW_NUMBER()`       | Assign sequential row numbers                          | Household spending rankings               |
-| `CORR()`             | Measure linear correlation between numerical variables | Spending frequency versus basket value    |
+## SQL techniques in practice
 
-## Key Learning: NTILE()
+| Technique            | What it does                                                | How it was used                                                   |
+| -------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
+| `CTE (WITH)`         | Organizes complex analysis into readable steps              | Qualifying baskets, household metrics, and RFM scoring            |
+| `LAG()`              | Compares each row with a preceding row                      | Days between consecutive purchasing days                          |
+| `FILTER (WHERE ...)` | Applies conditions within an aggregate                      | Activity status and segment-level counts                          |
+| `PERCENTILE_CONT()`  | Calculates percentiles, including medians                   | Typical purchase gaps and household spending                      |
+| `NTILE()`            | Divides ranked rows into near-equal groups                  | Spending deciles, value groups, and RFM Frequency/Monetary scores |
+| `CUME_DIST()`        | Calculates cumulative rank while preserving ties            | RFM Recency scores for households with the same last-purchase day |
+| `ROW_NUMBER()`       | Numbers rows in a defined order                             | Household spending rankings                                       |
+| `CORR()`             | Measures the strength and direction of a linear association | Spending versus purchase frequency and average basket value       |
+| `CASE WHEN`          | Classifies records using ordered conditions                 | Customer activity statuses and six RFM segments                   |
+| `EXISTS`             | Checks whether at least one related record exists           | Campaign assignment and coupon redemption by household            |
+| `COUNT(*) OVER ()`   | Adds a total count without collapsing rows                  | Reporting all 328 growth candidates while displaying the top 20   |
+| `MIN()` and `HAVING` | Find an earliest event and filter grouped results           | First coupon redemption and eligible before/after windows         |
+| `COALESCE()`         | Replaces missing values with a specified fallback           | Retaining zero-purchase windows in promotional comparisons        |
 
-`NTILE(n)` is a SQL window function that divides ordered
-records into approximately equal-sized groups.
+## Four important distinctions
 
-It helps us segment customers based on their ranking,
-without manually setting spending thresholds.
+**`NTILE()` vs. `CUME_DIST()`**  
+`NTILE(5)` places ranked households into five approximately equal-sized groups; equal values can be split across groups. `CUME_DIST()` gives tied values the same cumulative rank, which is why it was used for Recency scoring. These scores describe **relative behavior**, not fixed spending or inactivity thresholds.
 
-Examples:
+**`EXISTS` vs. `JOIN`**  
+Use `EXISTS` to answer _“Did this household redeem a coupon at least once?”_ without duplicating households that have multiple matching records. Use joins when details from related rows are needed.
 
-- `NTILE(10)`: Spending deciles (10% groups).
-- `NTILE(5)`: Spending quintiles (20% groups).
+**`CORR()` vs. causation**  
+`CORR()` measures linear association, not whether one variable causes another to change. In this project, household spending was more strongly associated with purchase frequency (`0.703`) than with average basket value (`0.390`).
 
-NTILE is a SQL ranking and segmentation function,
-not a statistical hypothesis test.
+**`COUNT(*) OVER ()` vs. `COUNT(*)`**  
+A window count shows the size of the qualifying population alongside individual rows. It allowed the growth shortlist to display **20 example households** while retaining the **328-household total**.
 
-## Key Learning: CORR()
+> **Interpretation note:** RFM labels are analytical segments, not confirmed loyalty or churn. Coupon redemption and 30-day before/after comparisons are descriptive; they do not establish promotional impact.
 
-`CORR()` calculates the Pearson correlation coefficient.
-
-- Near +1: Strong positive linear relationship.
-- Near 0: Weak or no linear relationship.
-- Near -1: Strong negative linear relationship.
-
-A correlation does not prove that one variable causes
-changes in another.
-
-### EXISTS — Checking Whether a Matching Record Exists
-
-`EXISTS` checks whether a subquery returns at least one row.
-
-- Returns TRUE if a matching record exists.
-- Returns FALSE if no matching record exists.
-- `SELECT 1` is a convention; the actual value is irrelevant.
-
-**Project example:** Check whether each household was
-assigned to a campaign or redeemed a coupon.
-
-**Why use it?** Unlike a regular JOIN, EXISTS does not
-duplicate the original household rows when multiple
-matching records are found.
-
-## Objective 3 — Useful SQL techniques
-
-| Technique                     | What it does                                                           | How we used it                                                                     |
-| ----------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `CUME_DIST()`                 | Cumulative relative position; identical values receive the same result | Recency scoring without splitting households with the same last-purchase day       |
-| `NTILE(5)`                    | Divides ordered rows into five approximately equal ranking groups      | Frequency and Monetary scores, without manually choosing spending thresholds       |
-| `CASE WHEN`                   | Applies ordered classification rules; first matching rule wins         | Six RFM customer segments                                                          |
-| `COUNT(*) FILTER (WHERE ...)` | Counts rows meeting a condition without losing other rows              | 90+ day inactivity and segment-level campaign statistics                           |
-| `EXISTS (SELECT 1 ...)`       | Tests whether at least one matching record exists                      | Household-level campaign assignment and coupon redemption, avoiding duplicate rows |
-| `COUNT(*) OVER ()`            | Returns the total row count alongside each row                         | Shows 328 qualifying growth candidates even when displaying only 20                |
-| `MIN(day)` and `HAVING`       | Finds the first redemption and restricts the eligible analysis cohort  | Choosing households with complete 30-day pre/post windows                          |
-| `COALESCE()`                  | Replaces `NULL` with a fallback value                                  | Includes zero-spending before/after windows correctly                              |
-
-**`NTILE()` example:** With 2,500 households sorted by spending ascending, `NTILE(5)` assigns scores 1–5 in groups of 500: the lowest 500 get 1, the next 500 get 2, and the highest 500 get 5. The scores represent **relative positions**, not equal amounts of spending. Ties may be split between groups.
-
-**`CUME_DIST()` distinction:** Unlike `NTILE`, all households with the same Recency value receive the same cumulative proportion and therefore the same R score when applying `CEIL(5 * CUME_DIST())`. Group sizes can vary.
-
-**`EXISTS` takeaway:** Use it for _“Did this household do something at least once?”_ rather than _“How many times did it do so?”_ `SELECT 1` does not count events; it only tests for a matching row.
-
-**Learning caution:** Correlations, RFM labels, and coupon before/after differences describe historical patterns, not causal effects.
+For methodological rules and assumptions, see [Analytical Methodology](methodology.md). For findings and recommendations, see [Findings & Business Implications](final_insights.md).

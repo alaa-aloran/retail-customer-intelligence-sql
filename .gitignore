@@ -1,12 +1,24 @@
 
-# Ignore large datasets
+# Local datasets
 data/raw/
 data/processed/
 archived_data_csv_files/
 *.csv
 *.zip
 
-# Environment and temporary files
+# Credentials and environment files
 .env
+.env.*
+!.env.example
 *.log
+
+# Database backups and local configuration
+*.backup
+*.dump
+.vscode/settings.json
+
+# Temporary and system files
 __pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
