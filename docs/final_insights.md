@@ -15,10 +15,6 @@
 
 ### Q1. How often do households purchase?
 
-### Q1. How often do households purchase?
-
-### Q1. How often do households purchase?
-
 Across **2,500 households**, the analysis identified **275,539 qualifying baskets** over 711 days. The median household made **78 purchases**, while the median time between consecutive _purchasing days_ was **3 days**.
 
 **Business implication:** Understanding how frequently households purchase and how regularly they return can help retailers identify changes in customer engagement and detect early signs of declining activity.
